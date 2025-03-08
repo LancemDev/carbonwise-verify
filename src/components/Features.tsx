@@ -99,7 +99,8 @@ const Features = () => {
           ))}
         </div>
         
-        <style jsx>{`
+        <style>
+          {`
           .animate-in {
             animation: fadeInUp 0.8s ease forwards;
           }
@@ -128,7 +129,8 @@ const Features = () => {
           .hover-lift:hover {
             transform: translateY(-5px);
           }
-        `}</style>
+          `}
+        </style>
       </div>
     </section>
   );

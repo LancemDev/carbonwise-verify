@@ -87,7 +87,8 @@ const Hero = () => {
         </div>
       </div>
       
-      <style jsx>{`
+      <style>
+        {`
         .glass {
           background: rgba(255, 255, 255, 0.1);
           backdrop-filter: blur(10px);
@@ -114,7 +115,8 @@ const Hero = () => {
           box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
           transform: translateY(-5px);
         }
-      `}</style>
+        `}
+      </style>
     </section>
   );
 };
