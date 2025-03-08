@@ -35,6 +35,63 @@ export type Database = {
           username?: string | null
         }
         Relationships: []
+      },
+      projects: {
+        Row: {
+          id: string
+          user_id: string
+          project_name: string
+          project_type: string
+          location: string
+          area: number
+          description: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          project_name: string
+          project_type: string
+          location: string
+          area: number
+          description: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          project_name?: string
+          project_type?: string
+          location?: string
+          area?: number
+          description?: string
+          created_at?: string
+        }
+        Relationships: []
+      },
+      project_files: {
+        Row: {
+          id: string
+          project_id: string
+          file_name: string
+          file_url: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          project_id: string
+          file_name: string
+          file_url: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          project_id?: string
+          file_name?: string
+          file_url?: string
+          created_at?: string
+        }
+        Relationships: []
       }
     }
     Views: {

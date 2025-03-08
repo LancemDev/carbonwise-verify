@@ -1,6 +1,6 @@
-
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useDropzone } from "react-dropzone";
 import { supabase } from "@/integrations/supabase/client";
 import { ArrowRight, Check, Info, Loader2, MapPin, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -24,6 +24,7 @@ const projectTypes = [
 const Register = () => {
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const navigate = useNavigate();
   
   const [formData, setFormData] = useState({
@@ -49,6 +50,10 @@ const Register = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  const handleDrop = (acceptedFiles: File[]) => {
+    setUploadedFiles(acceptedFiles);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -67,7 +72,7 @@ const Register = () => {
     
     try {
       // Sign up user with Supabase
-      const { data, error } = await supabase.auth.signUp({
+      const { data: userData, error: userError } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
         options: {
@@ -79,16 +84,52 @@ const Register = () => {
         },
       });
 
-      if (error) {
-        toast.error(error.message);
-      } else {
-        // Store project data (in a real app, you would have a projects table)
-        // For now, just show success and redirect
-        toast.success("Registration successful! Check your email to confirm your account.");
-        
-        // If email confirmation is disabled in Supabase, you might want to redirect to dashboard
-        navigate("/dashboard");
+      if (userError) {
+        toast.error(userError.message);
+        return;
       }
+
+      // Store project data
+      const { data: projectData, error: projectError } = await supabase
+        .from('projects')
+        .insert({
+          user_id: userData.user.id,
+          project_name: formData.projectName,
+          project_type: formData.projectType,
+          location: formData.location,
+          area: formData.area,
+          description: formData.description,
+        })
+        .single();
+
+      if (projectError) {
+        toast.error(projectError.message);
+        return;
+      }
+
+      // Upload files to Supabase storage and store file information
+      for (const file of uploadedFiles) {
+        const { data: fileData, error: fileError } = await supabase
+          .storage
+          .from('project_files')
+          .upload(`projects/${projectData.id}/${file.name}`, file);
+
+        if (fileError) {
+          toast.error(fileError.message);
+          return;
+        }
+
+        await supabase
+          .from('project_files')
+          .insert({
+            project_id: projectData.id,
+            file_name: file.name,
+            file_url: fileData.Key,
+          });
+      }
+
+      toast.success("Registration successful! Check your email to confirm your account.");
+      navigate("/dashboard");
     } catch (error: any) {
       toast.error(error.message || "An error occurred during registration");
     } finally {
@@ -113,6 +154,8 @@ const Register = () => {
       </div>
     </div>
   );
+
+  const { getRootProps, getInputProps } = useDropzone({ onDrop: handleDrop });
 
   return (
     <div className="min-h-screen">
@@ -315,7 +358,8 @@ const Register = () => {
                       </div>
                     </div>
                     
-                    <div className="border-2 border-dashed border-muted rounded-lg p-8 text-center">
+                    <div {...getRootProps()} className="border-2 border-dashed border-muted rounded-lg p-8 text-center">
+                      <input {...getInputProps()} />
                       <Upload className="mx-auto h-10 w-10 text-muted-foreground mb-4" />
                       <h3 className="text-lg font-medium mb-2">Upload Project Documents</h3>
                       <p className="text-sm text-muted-foreground mb-4">
@@ -328,6 +372,19 @@ const Register = () => {
                         Supported formats: PDF, JPEG, PNG, TIFF, GeoTIFF, KML, SHP (Max 50MB)
                       </p>
                     </div>
+
+                    {uploadedFiles.length > 0 && (
+                      <div className="mt-4">
+                        <h3 className="text-lg font-medium mb-2">Selected Files</h3>
+                        <ul className="list-disc list-inside">
+                          {uploadedFiles.map((file, index) => (
+                            <li key={index} className="text-sm text-muted-foreground">
+                              {file.name}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                     
                     <div>
                       <Label htmlFor="additionalInfo">Additional Information (Optional)</Label>
