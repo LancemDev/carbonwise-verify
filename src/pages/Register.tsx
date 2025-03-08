@@ -1,14 +1,16 @@
 
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 import { ArrowRight, Check, Info, Loader2, MapPin, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Link } from "react-router-dom";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import { toast } from "sonner";
 
 const projectTypes = [
   { value: "forest", label: "Forestry & Reforestation" },
@@ -22,6 +24,8 @@ const projectTypes = [
 const Register = () => {
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+  
   const [formData, setFormData] = useState({
     projectName: "",
     projectType: "",
@@ -31,6 +35,8 @@ const Register = () => {
     firstName: "",
     lastName: "",
     email: "",
+    password: "",
+    confirmPassword: "",
     organization: "",
   });
 
@@ -43,18 +49,50 @@ const Register = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
     if (step < 3) {
       setStep(step + 1);
-    } else {
-      setIsLoading(true);
-      // Simulate form submission
-      setTimeout(() => {
-        setIsLoading(false);
-        // Redirect to success page or dashboard
-        window.location.href = "/dashboard";
-      }, 2000);
+      return;
+    }
+
+    // Check if passwords match
+    if (formData.password !== formData.confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
+
+    setIsLoading(true);
+    
+    try {
+      // Sign up user with Supabase
+      const { data, error } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+        options: {
+          data: {
+            first_name: formData.firstName,
+            last_name: formData.lastName,
+            organization: formData.organization,
+          },
+        },
+      });
+
+      if (error) {
+        toast.error(error.message);
+      } else {
+        // Store project data (in a real app, you would have a projects table)
+        // For now, just show success and redirect
+        toast.success("Registration successful! Check your email to confirm your account.");
+        
+        // If email confirmation is disabled in Supabase, you might want to redirect to dashboard
+        navigate("/dashboard");
+      }
+    } catch (error: any) {
+      toast.error(error.message || "An error occurred during registration");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -112,7 +150,10 @@ const Register = () => {
                     
                     <div>
                       <Label htmlFor="projectType">Project Type</Label>
-                      <Select onValueChange={(value) => handleSelectChange("projectType", value)} required>
+                      <Select 
+                        onValueChange={(value) => handleSelectChange("projectType", value)} 
+                        required
+                      >
                         <SelectTrigger>
                           <SelectValue placeholder="Select project type" />
                         </SelectTrigger>
@@ -174,7 +215,7 @@ const Register = () => {
               
               {step === 2 && (
                 <div className="space-y-6 animate-fade-in">
-                  <h2 className="text-xl font-semibold mb-6">Contact Information</h2>
+                  <h2 className="text-xl font-semibold mb-6">Account Information</h2>
                   
                   <div className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -214,6 +255,36 @@ const Register = () => {
                         placeholder="your.email@example.com" 
                         required 
                       />
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="password">Password</Label>
+                        <Input 
+                          id="password" 
+                          name="password" 
+                          type="password" 
+                          value={formData.password} 
+                          onChange={handleChange} 
+                          placeholder="Create a password" 
+                          required 
+                          minLength={6}
+                        />
+                      </div>
+                      
+                      <div>
+                        <Label htmlFor="confirmPassword">Confirm Password</Label>
+                        <Input 
+                          id="confirmPassword" 
+                          name="confirmPassword" 
+                          type="password" 
+                          value={formData.confirmPassword} 
+                          onChange={handleChange} 
+                          placeholder="Confirm your password" 
+                          required 
+                          minLength={6}
+                        />
+                      </div>
                     </div>
                     
                     <div>
