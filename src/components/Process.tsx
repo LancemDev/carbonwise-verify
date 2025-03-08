@@ -36,7 +36,7 @@ const Process = () => {
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex flex-col items-center text-center mb-16">
           <span className="text-sm font-medium text-forest-600 mb-3">THE PROCESS</span>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">How CarbonWise Works</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">How Green Connect Works</h2>
           <p className="text-muted-foreground max-w-2xl">A simple four-step process that makes carbon credit verification accessible for small-scale projects.</p>
         </div>
         

@@ -211,7 +211,7 @@ const Index = () => {
                   <div className="flex justify-between items-start mb-6">
                     <div>
                       <h3 className="text-2xl font-bold">Carbon Credit Certificate</h3>
-                      <p className="text-muted-foreground">Verified by CarbonWise AI</p>
+                      <p className="text-muted-foreground">Verified by Green Connect AI</p>
                     </div>
                     <Award className="w-12 h-12 text-forest-600" />
                   </div>
@@ -266,14 +266,14 @@ const Index = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <TestimonialCard 
-              quote="CarbonWise's AI verification cut our certification timeline from months to weeks. The process was seamless and affordable."
+              quote="GreenConnect's AI verification cut our certification timeline from months to weeks. The process was seamless and affordable."
               author="Emily Chen"
               role="Project Manager"
               company="GreenForest Initiative"
               image="https://randomuser.me/api/portraits/women/32.jpg"
             />
             <TestimonialCard 
-              quote="As a small farm collective, we couldn't afford traditional verification. CarbonWise made it possible for us to enter the carbon market."
+              quote="As a small farm collective, we couldn't afford traditional verification. Green Connect made it possible for us to enter the carbon market."
               author="Michael Rodriguez"
               role="Founder"
               company="Sustainable Farms Collective"
@@ -296,7 +296,7 @@ const Index = () => {
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Verify Your Carbon Project?</h2>
             <p className="text-forest-200 mb-8 text-lg">
-              Join hundreds of projects already using CarbonWise to simplify verification and access carbon markets.
+              Join hundreds of projects already using Green Connect to simplify verification and access carbon markets.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Link to="/register">

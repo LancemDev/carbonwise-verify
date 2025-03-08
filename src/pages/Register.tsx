@@ -82,7 +82,7 @@ const Register = () => {
             organization: formData.organization,
           },
         },
-      });
+      }, { mode: 'no-cors' });
 
       if (userError) {
         toast.error(userError.message);

@@ -26,7 +26,7 @@ const Navbar = () => {
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-forest-500 to-forest-600 flex items-center justify-center">
               <span className="text-white font-bold text-xl">C</span>
             </div>
-            <span className="font-semibold text-xl">CarbonWise</span>
+            <span className="font-semibold text-xl">Green Connect</span>
           </Link>
 
           {/* Desktop Navigation */}

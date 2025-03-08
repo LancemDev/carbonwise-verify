@@ -49,7 +49,7 @@ const Login = () => {
             <div className="text-center mb-8">
               <h1 className="text-2xl font-bold">Welcome Back</h1>
               <p className="text-muted-foreground mt-2">
-                Sign in to your CarbonWise account
+                Sign in to your Green Connect account
               </p>
             </div>
             

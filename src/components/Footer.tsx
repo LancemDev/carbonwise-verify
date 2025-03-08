@@ -12,7 +12,7 @@ const Footer = () => {
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-forest-500 to-forest-600 flex items-center justify-center">
                 <span className="text-white font-bold text-xl">C</span>
               </div>
-              <span className="font-semibold text-xl">CarbonWise</span>
+              <span className="font-semibold text-xl">Green Connect</span>
             </Link>
             <p className="text-forest-200 mb-6">
               Simplifying carbon sequestration verification with AI technology for small-scale projects.
@@ -59,7 +59,7 @@ const Footer = () => {
               </li>
               <li className="flex items-center">
                 <Mail size={20} className="mr-3 text-forest-400" />
-                <a href="mailto:info@carbonwise.com" className="text-forest-200 hover:text-white transition-colors">info@carbonwise.com</a>
+                <a href="mailto:info@greenconnect.com" className="text-forest-200 hover:text-white transition-colors">info@greenconnect.com</a>
               </li>
               <li className="flex items-center">
                 <Phone size={20} className="mr-3 text-forest-400" />
@@ -70,7 +70,7 @@ const Footer = () => {
         </div>
         
         <div className="pt-8 border-t border-forest-800 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-forest-400 text-sm">© 2023 CarbonWise. All rights reserved.</p>
+          <p className="text-forest-400 text-sm">© 2025 Green Connect. All rights reserved.</p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <Link to="/privacy" className="text-forest-400 hover:text-white transition-colors text-sm">Privacy Policy</Link>
             <Link to="/terms" className="text-forest-400 hover:text-white transition-colors text-sm">Terms of Service</Link>
