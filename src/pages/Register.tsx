@@ -51,7 +51,7 @@ const Register = () => {
   };
 
   const handleDrop = (acceptedFiles: File[]) => {
-    setUploadedFiles(acceptedFiles);
+    setUploadedFiles(prev => [...prev, ...acceptedFiles]);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
